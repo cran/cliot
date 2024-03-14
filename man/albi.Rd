@@ -14,10 +14,10 @@ albi(sbill, salb, units = "")
 Numeric value of serum bilirubin in either non-SI (mg/dL) or SI (umol/ml).
 }
   \item{salb}{
-Numeric value of serum albumin in either non-SI (g/dL) or SI (g/L)
+Numeric value of serum albumin in either non-SI (g/dL) or SI (g/L).
 }
   \item{units}{
-String to specify non-SI units by not including units argument or SI units by including units="SI"
+String to specify non-SI units by not including units argument or SI units by including units="SI".
 }
 }
 \value{

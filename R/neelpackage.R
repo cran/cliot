@@ -112,6 +112,7 @@ kidney_risk_num <- function(egfr, sex, acr, age, alb, phos, bicarb, calc, units 
   else
     return(NA)
 }
+
 kid_risk_perc<-function(egfr, sex, acr, age, alb, phos, bicarb, calc, units = ""){
   x<- kidney_risk_num(egfr, sex, acr, age, alb, phos, bicarb, calc, units)
   if(!is.na(x)){
@@ -202,6 +203,7 @@ kid_risk_perc<-function(egfr, sex, acr, age, alb, phos, bicarb, calc, units = ""
   else
     return(NA)
 }
+
 meld_xi<-function(sbill, screat){
   if(!is.na(sbill)&!is.na(screat)){
     sbill <- as.numeric(sbill)
@@ -212,6 +214,7 @@ meld_xi<-function(sbill, screat){
   else
     return(NA)
 }
+
 fib4<-function(age, ast, alt, plt){
   if(!is.na(age) & !is.na(ast) & !is.na(alt)&!is.na(plt)){
     age <- as.numeric(age)
@@ -224,6 +227,7 @@ fib4<-function(age, ast, alt, plt){
   else
     return(NA)
 }
+
 apri<-function(ast, plt){
   if(!is.na(ast)&!is.na(plt)){
     ast <- as.numeric(ast)
@@ -234,6 +238,7 @@ apri<-function(ast, plt){
   else
     return(NA)
 }
+
 albi<-function(sbill, salb, units = ""){
   if(units == "SI"){
     sbill <- as.numeric(sbill)
@@ -250,6 +255,7 @@ albi<-function(sbill, salb, units = ""){
   else
     return(NA)
 }
+
 fli<-function(trigly, bmi, waist, ggt, units = ""){
   if(units == "SI"){
     trigly <- as.numeric(trigly)
@@ -267,6 +273,7 @@ fli<-function(trigly, bmi, waist, ggt, units = ""){
   else
     return(NA)
 }
+
 eAG <- function(a1c){
   a1c = as.numeric(a1c)
   if(!is.na(a1c))
@@ -274,6 +281,7 @@ eAG <- function(a1c){
   else
     return(NA)
 }
+
 homair <- function(insulin,glucose, units = ""){
   if(units == "SI"){
     insulin = as.numeric(insulin)
@@ -287,4 +295,209 @@ homair <- function(insulin,glucose, units = ""){
     return((insulin * glucose)/405)
   else
     return(NA)
+}
+
+bard_score <- function(bmi, ast, alt, diabetes){
+  bmi <- as.numeric(bmi)
+  ast <- as.numeric(ast)
+  alt <- as.numeric(alt)
+  diabetes <- as.numeric(diabetes)
+  if(is.na(diabetes) | is.na(bmi) | is.na(ast) | is.na(alt)){
+    return(NA)
+  }
+  y <- ast/alt
+  if(is.na(y)){
+    return(NA)
+  }
+  x<- 0
+  if(bmi >= 28){
+    x <- x + 1
+  }
+  if((y) >= 0.8){
+    x <- x + 2
+  }
+  if(diabetes == 1){
+    x <- x + 1
+  }
+  return(x)
+}
+
+bard_score_interpret <- function(bmi, ast, alt, diabetes){
+  x<- bard_score(bmi, ast, alt, diabetes)
+  if(is.na(x))
+    return(NA)
+  if(x >1){
+    y<- "high"
+  }
+  else{
+    y<- "low"
+  }
+  return(y)
+}
+
+ast_alt_ratio_interpret <- function(ast, alt){
+  ast <- as.numeric(ast)
+  alt <- as.numeric(alt)
+  if(is.na(ast) | is.na(alt)){
+    return(NA)
+  }
+  y <- ast/alt
+  if(is.na(y)){
+    return(NA)
+  }
+  x<- 0
+  if((y) >= 0.8){
+    x <- 1
+  }
+  return(x)
+}
+
+nafld_score <- function(age, bmi, diabetes, ast, alt, platelet, albumin, units = ""){
+  age = as.numeric(age)
+  bmi = as.numeric(bmi)
+  diabetes = as.numeric(diabetes)
+  ast = as.numeric(ast)
+  alt = as.numeric(alt)
+  platelet = as.numeric(platelet)
+  albumin = as.numeric(albumin)
+  if(units == "SI"){
+  albumin = albumin / 10
+  }
+  if(is.na(age) | is.na(bmi)| is.na(diabetes)| is.na(ast)| is.na(alt)| is.na(platelet)| is.na(albumin)){
+    return(NA)
+  }
+  x<- -1.675 + (0.037 * age) + (0.094 * bmi) + (1.13 * diabetes) + (0.99 * (ast/alt)) - (0.013 * platelet) - (0.66 * albumin)
+  return(x)
+}
+
+rfactor <- function(alt, alp){
+  alt = as.numeric(alt)
+  alp = as.numeric(alp)
+  if(is.na(alp) | is.na(alt)){
+    return(NA)
+  }
+  x<- (alt/40)/(alp/120)
+  return(x)
+}
+
+rfactor_interpret <- function(alt, alp){
+  x<- rfactor(alt, alp)
+  x = as.numeric(x)
+  if(is.na(x)){
+    return(NA)
+  }
+  if(x <2){
+    return("cholestatic")
+  }
+  else if(x>5){
+    return("hepatocellular")
+  }
+  else{
+    return("indeterminate")
+  }
+}
+
+aha_stroke <- function(bp, afib, sugar, bmi, diet, chol, dm, physical, hx, smoke){
+  bp <- as.numeric(bp)
+  afib <- as.numeric(afib)
+  sugar <- as.numeric(sugar)
+  bmi <- as.numeric(bmi)
+  diet <- as.numeric(diet)
+  chol <- as.numeric(chol)
+  dm <- as.numeric(dm)
+  physical <- as.numeric(physical)
+  hx <- as.numeric(hx)
+  smoke <- as.numeric(smoke)
+  if(is.na(bp)){
+    bp <- 1
+  }
+  if(is.na(afib)){
+    afib <- 1
+  }
+  if(is.na(sugar)){
+    sugar <- 1
+  }
+  if(is.na(bmi)){
+    bmi <- 1
+  }
+  if(is.na(diet)){
+    diet <- 1
+  }
+  if(is.na(chol)){
+    chol <- 1
+  }
+  if(is.na(dm)){
+    dm <- 1
+  }
+  if(is.na(physical)){
+    physical <- 1
+  }
+  if(is.na(hx)){
+    hx <- 1
+  }
+  if(is.na(smoke)){
+    smoke <- 1
+  }
+  x <- 0
+  if(bp == 1){
+    x = x + 1
+  }
+  else{
+    x = x - 1
+  }
+  if(afib == 1){
+    x = x + 1
+  }
+  else{
+    x = x - 1
+  }
+  if(sugar == 1){
+    x = x + 1
+  }
+  else{
+    x = x - 1
+  }
+  if(bmi == 1){
+    x = x + 1
+  }
+  else{
+    x = x - 1
+  }
+  if(diet == 1){
+    x = x + 1
+  }
+  else{
+    x = x - 1
+  }
+  if(chol == 1){
+    x = x + 1
+  }
+  else{
+    x = x - 1
+  }
+  if(dm == 1){
+    x = x + 1
+  }
+  else{
+    x = x - 1
+  }
+  if(physical == 1){
+    x = x + 1
+  }
+  else{
+    x = x - 1
+  }
+  if(hx == 1){
+    x = x + 1
+  }
+  else{
+    x = x - 1
+  }
+  if(smoke == 1){
+    x = x + 1
+  }
+  else{
+    x = x - 1
+  }
+  return(x)
 }

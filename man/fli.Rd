@@ -23,7 +23,7 @@ Numeric value of waist circumference in cm.
 Numeric value of gamma glutyl transpeptidase (GGT) in U/L.
 }
   \item{units}{
-String to specify non-SI units by not including units argument or SI units by including units="SI"
+String to specify non-SI units by not including units argument or SI units by including units="SI".
 }
 }
 \value{

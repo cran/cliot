@@ -14,10 +14,10 @@ homair(insulin,glucose, units = "")
 Numeric value of insulin in either SI (pmol/L) or non-SI (uIU/ml).
 }
   \item{glucose}{
-Numeric value of glucose in either non-SI (mg/dL) or non-SI (mmol/L)
+Numeric value of glucose in either non-SI (mg/dL) or non-SI (mmol/L).
 }
   \item{units}{
-String to specify non-SI units by not including units argument or SI units by including units="SI"
+String to specify non-SI units by not including units argument or SI units by including units="SI".
 }
 }
 \value{
